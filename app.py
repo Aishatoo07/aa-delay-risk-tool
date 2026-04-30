@@ -2,7 +2,11 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
-import shap
+try:
+    import shap
+    SHAP_AVAILABLE = True
+except:
+    SHAP_AVAILABLE = False
 import matplotlib.pyplot as plt
 import json
 import warnings
