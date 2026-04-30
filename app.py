@@ -101,8 +101,10 @@ st.markdown("""
 # ============================================
 @st.cache_resource
 def load_model():
-    model    = joblib.load('xgb_model.pkl')
-    explainer = joblib.load('shap_explainer.pkl')
+    with open('xgb_model.pkl', 'rb') as f:
+        model = pickle.load(f)
+    with open('shap_explainer.pkl', 'rb') as f:
+        explainer = pickle.load(f)
     with open('feature_cols.json', 'r') as f:
         cols = json.load(f)
     return model, explainer, cols
