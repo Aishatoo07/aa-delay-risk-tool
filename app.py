@@ -446,25 +446,31 @@ if predict_btn:
         )
 
         # SHAP waterfall for this flight
-        shap_vals = explainer.shap_values(X_input)
-        fig, ax = plt.subplots(figsize=(8, 5))
-        fig.patch.set_facecolor('#0d2137')
-        ax.set_facecolor('#0d2137')
+        # SHAP waterfall for this flight
+        if SHAP_AVAILABLE:
+            try:
+                shap_vals = explainer.shap_values(X_input)
+                fig, ax = plt.subplots(figsize=(8, 5))
+                fig.patch.set_facecolor('#0d2137')
+                ax.set_facecolor('#0d2137')
 
-        shap.plots.waterfall(
-            shap.Explanation(
-                values=shap_vals[0],
-                base_values=explainer.expected_value,
-                data=X_input.iloc[0],
-                feature_names=feature_cols
-            ),
-            show=False,
-            max_display=10
-        )
-        plt.tight_layout()
-        st.pyplot(fig)
-        plt.close()
-
+                shap.plots.waterfall(
+                    shap.Explanation(
+                        values=shap_vals[0],
+                        base_values=explainer.expected_value,
+                        data=X_input.iloc[0],
+                        feature_names=feature_cols
+                    ),
+                    show=False,
+                    max_display=10
+                )
+                plt.tight_layout()
+                st.pyplot(fig)
+                plt.close()
+            except Exception as e:
+                st.info(f"SHAP chart unavailable: {e}")
+        else:
+            st.info("SHAP loading — please wait...")
     # ----------------------------------------
     # ROW 4 — Cost Estimate
     # ----------------------------------------
