@@ -104,13 +104,23 @@ st.markdown("""
 # LOAD MODEL + EXPLAINER
 # ============================================
 @st.cache_resource
+@st.cache_resource
 def load_model():
+    # Load model
     with open('xgb_model.pkl', 'rb') as f:
         model = pickle.load(f)
-    with open('shap_explainer.pkl', 'rb') as f:
-        explainer = pickle.load(f)
+    
+    # Load feature columns
     with open('feature_cols.json', 'r') as f:
         cols = json.load(f)
+    
+    # Rebuild explainer from model directly
+    # instead of loading from file
+    if SHAP_AVAILABLE:
+        explainer = shap.TreeExplainer(model)
+    else:
+        explainer = None
+    
     return model, explainer, cols
 
 model, explainer, feature_cols = load_model()
